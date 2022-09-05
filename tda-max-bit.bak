@@ -1,0 +1,23 @@
+#lang racket
+
+;;contructor de pixmap-d
+
+(define constructor-imagen ;; version 3.-> contructor de imagen
+  (lambda (largo ancho  . imagen)
+    (list largo ancho imagen )))
+
+(define pixbit-d ;;contructor del bit de la imagen 
+  (lambda (r g b depth)
+    (list r g b depth)))
+
+;;(constructor-imagen 2 2 (pixbit-d  0 0 1 10) (pixbit-d  0 1 0 20) (pixbit-d 1 0 0 30) (pixbit-d 1 1 1 4)) 
+;;'(2 2 ((0 0 1 10) (0 1 0 20) (1 0 0 30) (1 1 1 4)))
+;; de esta matrix de dato pixbit me interesa solo el bit en este caso y la profundidad
+
+(define get-fil-pixmap-d ;;seclectores de pixbit-d
+  (lambda (constructor-imagen)
+    (car constructor-imagen)))
+
+(define get-col-pixmap-d ;;selectores de pixbit-d
+  (lambda (constructor-imagen)
+    (car (cdr constructor-imagen))))
