@@ -48,19 +48,26 @@
       [(null? imagen) flip-list]
       (else (flipV-interna (cdr imagen) (cons (car imagen) flip-list))))))
 
-;;(define flipH
-  ;;(lambda (imagen)
-    ;;(flipH-invierte-filas imagen '() '())))
+(define flipH
+  (lambda (imagen)
+    (get-filas imagen '())))
 
-;;(define flipH-invierte-filas
-  ;;(lmabda (imagen flip-list imagen-flip)
-          ;;(cond
-            ;;[(null? imagen)])))
+(define get-filas;;get
+  (lambda (imagen flip-list)
+          (cond
+            [(null? imagen) (flipV-interna flip-list '())];;llamo a la funcion flipV, esta me invierte el arreglo
+            (else (get-filas (cdr imagen) (cons (flipH-invierte-filas (car imagen) '()) flip-list))))))
 
-
+(define flipH-invierte-filas
+  (lambda (filas list-aux)
+    (cond
+      [(null? filas) list-aux]
+      (else (flipH-invierte-filas (cdr filas) (cons (car filas) list-aux))))))
 
     
 ;;(flipV (constructor-imagen 2 2 (pixbit-d  0 0 1 10) (pixbit-d  0 1 0 20) (pixbit-d 1 0 0 30) (pixbit-d 1 1 1 4)))
+;;(flipH (constructor-imagen 2 2 (pixbit-d  0 0 1 10) (pixbit-d  0 1 0 20) (pixbit-d 1 0 0 30) (pixbit-d 1 1 1 4)))
+;;(flipH (constructor-imagen 3 2 (pixbit-d  0 0 1 10) (pixbit-d  0 1 0 20) (pixbit-d 0 1 1 49) (pixbit-d 1 0 0 30) (pixbit-d 1 1 1 4) (pixbit-d 1 2 1 50)))
 
 ;;ordena pixeles y construye
 ;;(define constru-imagen
@@ -133,18 +140,6 @@
       ;[(null? lista) llamo a la otra funcion con la lista de elementos a ordenar]
 
 ;;"\n" salto de linea
-
-(define flipH
-  (lambda (imagen)
-    (flipH-interna (get-fil imagen) (get-col imagen) imagen 0 0 '() '())))
-
-(define flipH-interna
-  (lambda (constructor-imagen fil col cant-fil cant-col lista imagen)
-          (cond
-            [(null? constructor-imagen)]
-            [(eq? cant-fil fil) (flipH-interna (cdr constructor-imagen) fil col 0 (+ 1 cant-col) '() (cons (reverse lista) imagen))]
-            [(eq? cant-col col) imagen]
-            (else (flipH-interna (cdr constructor-imagen) fil col (+ 1 cant-fil) cant-col (cons (car constructor-imagen) lista) imagen)))))
 
 ;;(flipH (constructor-imagen 2 2 (pixrgb-d  0 0 10 10 10 10) (pixrgb-d  0 1 20 20 20 20) (pixrgb-d 1 0 30 30 30 30) (pixrgb-d 1 1 40 40 40 40)))
  
