@@ -64,6 +64,16 @@
       [(null? filas) list-aux]
       (else (flipH-invierte-filas (cdr filas) (cons (car filas) list-aux))))))
 
+(define get-cant-col;;get cololumnas
+  (lambda (imagen)
+    (cond
+      [(null? imagen) 0]
+      (else (+ 1 (get-cant-col (cdr imagen)))))))
+
+(define get-cant-fil;;get filas
+  (lambda (imagen)
+    (get-cant-col (car imagen))))
+
     
 ;;(flipV (constructor-imagen 2 2 (pixbit-d  0 0 1 10) (pixbit-d  0 1 0 20) (pixbit-d 1 0 0 30) (pixbit-d 1 1 1 4)))
 ;;(flipH (constructor-imagen 2 2 (pixbit-d  0 0 1 10) (pixbit-d  0 1 0 20) (pixbit-d 1 0 0 30) (pixbit-d 1 1 1 4)))
