@@ -79,77 +79,55 @@
 ;;(flipH (constructor-imagen 2 2 (pixbit-d  0 0 1 10) (pixbit-d  0 1 0 20) (pixbit-d 1 0 0 30) (pixbit-d 1 1 1 4)))
 ;;(flipH (constructor-imagen 3 2 (pixbit-d  0 0 1 10) (pixbit-d  0 1 0 20) (pixbit-d 0 1 1 49) (pixbit-d 1 0 0 30) (pixbit-d 1 1 1 4) (pixbit-d 1 2 1 50)))
 
-;;ordena pixeles y construye
-;;(define constru-imagen
-  ;;(lambda (pixeles lista-temp imagen fil col cant-c cant-f)
-    ;;(cond
-      ;;[(eq? cant-c col) (reverse imagen)]
-      ;;[(eq? cant-f fil) (constru-imagen pixeles '() (cons (ordena-pixeles lista-temp '() col fil 0 0) imagen) fil col (+ 1 cant-c) 0)]
-      ;;[(eq? cant-c (car (car pixeles))) (constru-imagen (cdr pixeles) (cons (car pixeles) lista-temp) imagen fil col cant-c (+ 1 cant-f))]
-      ;;[(null? pixeles)(constru-imagen pixeles lista-temp imagen fil col cant-c cant-f)])))
+
+;;funcion que recorta el cuadrante de una imagen y retorna una imagen recortada
+;;x es y e y es x, esta al revez
+(define crop
+  (lambda (imagen x1 y1 x2 y2)
+    (toma-pixeles imagen x1 y1 x2 y2 '() (get-cant-col imagen) (get-cant-fil imagen) 0 0)))
+
+(define toma-pixeles
+  (lambda (imagen x1 y1 x2 y2 recorte fil col cant-col cant-fil)
+    (cond
+      [(< y2 cant-col) recorte]
+      [(null? imagen) recorte]
+      [(<= y1 cant-col) (toma-pixeles (cdr imagen) x1 y1 x2 y2 (cons (get-puntos (car imagen) '() x1 x2 fil 0) recorte) fil col (+ 1 cant-col) 0)]
+      (else (toma-pixeles (cdr imagen) x1 y1 x2 y2 recorte fil col (+ 1 cant-col) cant-fil)))))
+
+(define get-puntos
+  (lambda (fila recorte x1 x2 fil cant-fil)
+    (cond
+      [(< x2 cant-fil) recorte]
+      [(<= x1 cant-fil)(get-puntos (cdr fila) (cons (car fila) recorte) x1 x2 fil (+ 1 cant-fil))]
+      (else (get-puntos (cdr fila) recorte x1 x2 fil (+ 1 cant-fil))))))
+
+;;(crop (constructor-imagen 2 2 (pixbit-d  0 0 1 10) (pixbit-d  0 1 0 20) (pixbit-d 1 0 0 30) (pixbit-d 1 1 1 4)) 0 1 1 1)
 
 
-;;(define ordena-pixeles
-  ;;(lambda(pixeles lista-aux fil col cant-c cant-f)
-    ;;(cond
-      ;;[(eq? cant-f fil) (reverse lista-aux)]
-      ;;[(eq? cant-f  (car (cdr (car pixeles)))) (ordena-pixeles pixeles (cons (filtra-pos (car pixeles)) lista-aux) fil col cant-c (+ 1 cant-f))]
-      ;;[(null? pixeles) (ordena-pixeles pixeles lista-aux fil col cant-c cant-f)]
-      ;;(else (ordena-pixeles (cdr pixeles) lista-aux fil col cant-c cant-f)))))
+(define img1 '(((1 10) (0 20)) ((0 30) (1 4))))
+;;(crop img1 0 1 1 1)
 
-;;(define filtra-pos
-  ;;(lambda (pixeles)
-    ;;(cddr pixeles)))
-;;-hasta aca lo nuevo
+;;funcion que toma un pixel y lo tranforma a un hex
 
-;;->((0 0 1 10) (0 1 0 20) (1 0 0 30) (1 1 1 4))
+(define resto-num;;como idea se puede aplicar un map a todos los elementos
+  (lambda (numero lista)
+    (resta-resto (cons (quotient numero 16) lista) numero)));;(cons (quotient numero 16) lista
 
-;(define constru-imagen -> constructor original
-         ;(lambda(pixeles imagen fil col cant-f cant-c)
-           ;(cond
-             ;[(null? pixeles) (reverse imagen)];;(reverse imagen
-             ;(else (constru-imagen (cdr pixeles) (cons (crea-filas (car pixeles) '()) imagen) fil col 0 0)))))
-             
+(define resta-resto
+  (lambda (lista numero)
+    (cons (- numero (* 16 (car lista))) lista)))
 
-;;Nuevo contructor -> no terminado
-;(define constru-imagen
-  ;(lambda (pixeles imagen temp fil col cant-f cant-c);;nueva version
-    ;(cond
-      ;[(eq? cant-f fil) (constru-imagen (cdr pixeles) (cons (reverse temp) imagen) '() fil col 0 (+ 1 cant-c))]
-      ;[(eq? cant-c col) imagen]
-      ;[(null? pixeles) imagen]
-      ;(else (constru-imagen (cdr pixeles) imagen (cons (crea-filas (car pixeles) '()) imagen) fil col (+ 1 cant-f) cant-c)))))
-;;
+(define numero->hex
+  (lambda (imagen temp)
+    (cond
+      [(eq? 10 (car imagen)) (numero->hex (cdr imagen) (cons "A" temp))]
+      [(eq? 11 (car imagen)) (numero->hex (cdr imagen) (cons "B" temp))]
+      [(eq? 12 (car imagen)) (numero->hex (cdr imagen) (cons "C" temp))]
+      [(eq? 13 (car imagen)) (numero->hex (cdr imagen) (cons "D" temp))]
+      [(eq? 14 (car imagen)) (numero->hex (cdr imagen) (cons "E" temp))]
+      [(eq? 15 (car imagen)) (numero->hex (cdr imagen) (cons "F" temp))])))
 
-;(define crea-filas
-  ;(lambda (pixeles lista)
-    ;(cond 
-     ;[(null? (cddr pixeles)) (reverse lista)];;lista
-     ;(else (crea-filas (cdr pixeles) (cons (car (cddr pixeles)) lista))))))
 
-;;(car(reverse prueba))
-;;->10
 
-;;(cdr lista)
-;;-> '((0 1 0 20) (1 0 0 30) (1 1 1 4))
 
-(define lista '((0 0 1 10) (0 1 0 20) (1 0 0 30) (1 1 1 4)))
-(define prueba '(1 2 3 4 10))
 
-;;(constructor-imagen 2 2 (pixrgb-d  0 0 10 10 10 10) (pixrgb-d  0 1 20 20 20 20) (pixrgb-d 1 0 30 30 30 30) (pixrgb-d 1 1 40 40 40 40))
-
-;;filtro que compruba si esta en orden la los pixeles, en referencia a las posicines x e y
-
-;> (car (cdr (car '((1 2 3 45) (7 87264 4) (02 3)))))      
-;2
-
-;(define ordena
-  ;(lambda (lista largo ancho cant-a cant-l '())
-    ;(cond
-      ;[(eq? (car (car lista)) acum) (odena(car (cdr lista)) largo ancho cant-a cant-l (cond (car lista) temp))])))
-      ;[(null? lista) llamo a la otra funcion con la lista de elementos a ordenar]
-
-;;"\n" salto de linea
-
-;;(flipH (constructor-imagen 2 2 (pixrgb-d  0 0 10 10 10 10) (pixrgb-d  0 1 20 20 20 20) (pixrgb-d 1 0 30 30 30 30) (pixrgb-d 1 1 40 40 40 40)))
- 
