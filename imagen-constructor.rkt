@@ -109,25 +109,26 @@
 
 ;;funcion que toma un pixel y lo tranforma a un hex
 
-(define resto-num;;como idea se puede aplicar un map a todos los elementos
-  (lambda (numero lista)
-    (resta-resto (cons (quotient numero 16) lista) numero)));;(cons (quotient numero 16) lista
+;(provide get-R)
+;(provide get-G)
+;(provide get-B)
 
-(define resta-resto
-  (lambda (lista numero)
-    (cons (- numero (* 16 (car lista))) lista)))
+(define imgRGB->imgHex
+  (lambda (imagen)
+    (get-columnas imagen '())))
 
-(define numero->hex
-  (lambda (imagen temp)
+(define get-columnas
+  (lambda (imagen lista-temp)
     (cond
-      [(eq? 10 (car imagen)) (numero->hex (cdr imagen) (cons "A" temp))]
-      [(eq? 11 (car imagen)) (numero->hex (cdr imagen) (cons "B" temp))]
-      [(eq? 12 (car imagen)) (numero->hex (cdr imagen) (cons "C" temp))]
-      [(eq? 13 (car imagen)) (numero->hex (cdr imagen) (cons "D" temp))]
-      [(eq? 14 (car imagen)) (numero->hex (cdr imagen) (cons "E" temp))]
-      [(eq? 15 (car imagen)) (numero->hex (cdr imagen) (cons "F" temp))])))
+      [(null? imagen) (reverse lista-temp)]
+      (else (get-columnas (cdr imagen) (cons (recorre-pixeles (car imagen) '()) lista-temp))))))
+
+(define recorre-pixeles
+  (lambda (columna lista)
+    (cond
+      [(null? columna) (reverse lista)]
+      (else (recorre-pixeles (cdr columna) (cons (cons (string-append "#"
+      (string-append (car (resto-num (get-R (car columna)) '())) (string-append (car (resto-num (get-G (car columna)) '())) (car (resto-num (get-B (car columna)) '()))))) (list (get-D (car columna)))) lista))))))
 
 
-
-
-
+;;(imgRGB->imgHex (constructor-imagen 2 2 (pixrgb-d  0 0 10 10 10 10) (pixrgb-d  0 1 20 20 20 20) (pixrgb-d 1 0 30 30 30 30) (pixrgb-d 1 1 40 40 40 40)))
