@@ -104,7 +104,7 @@
 ;;(crop (constructor-imagen 2 2 (pixbit-d  0 0 1 10) (pixbit-d  0 1 0 20) (pixbit-d 1 0 0 30) (pixbit-d 1 1 1 4)) 0 1 1 1)
 
 
-(define img1 '(((1 10) (0 20)) ((0 30) (1 4))))
+
 ;;(crop img1 0 1 1 1)
 
 ;;funcion que toma un pixel y lo tranforma a un hex
@@ -171,7 +171,8 @@
   (lambda (imagen histo-imagen)
     (cond
       [(null? imagen) histo-imagen]
-       (else (histograma-envo (cdr imagen) (cons (obtiene-frecuencias (car imagen) imagen '() 0) histo-imagen))))))
+      [(repetidos (car imagen) histo-imagen) (histograma-envo (cdr imagen) (cons (obtiene-frecuencias (car imagen) imagen '() 0) histo-imagen))]
+       (else (histograma-envo (cdr imagen) histo-imagen)))))
 
 (define obtiene-frecuencias
   (lambda (pixel imagen aux contador)
@@ -180,13 +181,15 @@
       [(equal? pixel (car imagen)) (obtiene-frecuencias pixel (cdr imagen) aux (+ 1 contador))]
       (else (obtiene-frecuencias pixel (cdr imagen) aux contador)))))
 
+(define repetidos
+  (lambda (pixel histograma)
+    (cond
+      [(null? histograma) #t]
+      [(null? pixel) #t]
+      [(equal? (car pixel) (car (car histograma))) #f]
+      (else (repetidos pixel (cdr histograma))))))
 
-
-
-
-
-
-
+(define img1 '(((1 10) (0 20)) ((0 30) (1 4)) ((0 50) (1 60)) ((1 80) (1 90))))
 
 
 
