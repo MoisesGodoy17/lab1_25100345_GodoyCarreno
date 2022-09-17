@@ -132,3 +132,62 @@
 
 
 ;;(imgRGB->imgHex (constructor-imagen 2 2 (pixrgb-d  0 0 10 10 10 10) (pixrgb-d  0 1 20 20 20 20) (pixrgb-d 1 0 30 30 30 30) (pixrgb-d 1 1 40 40 40 40)))
+
+;;funcion que unifica todas las columnas, dejando una imagen de una columna y una fila con conpuesta por todas las columnas
+;;recursion natural
+
+(define descontructor
+  (lambda (imagen)
+    (cond
+     [(null? imagen) '()]
+     (else (append (get-filas-def (car imagen)) (descontructor (cdr imagen)))))))
+
+(define get-filas-def
+  (lambda (fila-pixeles)
+    (cond
+      [(null? fila-pixeles) '()]
+      (else (cons (car fila-pixeles) (get-filas-def (cdr fila-pixeles)))))))
+
+;;elimina la profundidad
+(define filtro-d
+  (lambda (imagen-descontruida)
+    (cond
+      [(null? imagen-descontruida) '()]
+      [else (cons (remove (last (car imagen-descontruida)) (car imagen-descontruida)) (filtro-d (cdr imagen-descontruida)))])))
+
+(define usa-filtros-descontruidos
+  (lambda (imagen)
+    (filtro-d(descontructor imagen))))
+
+;;(constructor-imagen 2 2 (pixrgb-d  0 0 10 10 10 10) (pixrgb-d  0 1 20 20 20 20) (pixrgb-d 1 0 30 30 30 30) (pixrgb-d 1 1 40 40 40 40))
+
+;;histograma
+
+(define histograma
+  (lambda (imagen)
+    (histograma-envo (filtro-d(descontructor imagen)) '())))
+
+(define histograma-envo
+  (lambda (imagen histo-imagen)
+    (cond
+      [(null? imagen) histo-imagen]
+       (else (histograma-envo (cdr imagen) (cons (obtiene-frecuencias (car imagen) imagen '() 0) histo-imagen))))))
+
+(define obtiene-frecuencias
+  (lambda (pixel imagen aux contador)
+    (cond
+      [(null? imagen) (append pixel (cons contador aux))]
+      [(equal? pixel (car imagen)) (obtiene-frecuencias pixel (cdr imagen) aux (+ 1 contador))]
+      (else (obtiene-frecuencias pixel (cdr imagen) aux contador)))))
+
+
+
+
+
+
+
+
+
+
+
+
