@@ -64,13 +64,15 @@
       [(null? filas) list-aux]
       (else (flipH-invierte-filas (cdr filas) (cons (car filas) list-aux))))))
 
-(define get-cant-col;;get cololumnas
+;---getters---;
+
+(define get-cant-col;;get cololumnas ***
   (lambda (imagen)
     (cond
       [(null? imagen) 0]
       (else (+ 1 (get-cant-col (cdr imagen)))))))
 
-(define get-cant-fil;;get filas
+(define get-cant-fil;;get filas ***
   (lambda (imagen)
     (get-cant-col (car imagen))))
 
@@ -189,7 +191,30 @@
       [(equal? (car pixel) (car (car histograma))) #f]
       (else (repetidos pixel (cdr histograma))))))
 
-(define img1 '(((1 10) (0 20)) ((0 30) (1 4)) ((0 50) (1 60)) ((1 80) (1 90))))
+(define img1 '(((1 10) (0 20))
+               ((0 30) (1 4))
+               ((0 50) (1 60))
+               ((1 80) (1 90))))
+
+
+(define rotate90
+  (lambda (imagen)
+    (envo90 imagen (get-cant-col imagen) (get-cant-fil imagen))))
+
+(define envo90
+  (lambda (imagen col fil)
+    (envo-rotate90 (descontructor imagen) (descontructor imagen) '() '() col fil 0 0 0 0)))
+
+(define envo-rotate90
+  (lambda (imagen imagen-copia imagen-aux temp cant-col cant-fil fil col aux contador)
+    (cond
+      [(eq? cant-fil col) (reverse imagen-aux)]
+      [(null? imagen) (envo-rotate90 imagen-copia imagen-copia (cons temp imagen-aux) '() cant-col cant-fil (+ 1 aux) (+ 1 col) (+ 1 aux) 0)]
+      [(eq? fil contador) (envo-rotate90 (cdr imagen) imagen-copia imagen-aux (cons (car imagen) temp) cant-col cant-fil (+ fil cant-fil) col aux (+ 1 contador))]
+      (else (envo-rotate90 (cdr imagen) imagen-copia imagen-aux temp cant-col cant-fil fil col aux (+ 1 contador))))))
+
+
+
 
 
 
