@@ -196,6 +196,10 @@
                ((0 50) (1 60))
                ((1 80) (1 90))))
 
+(define img4 '(((10 10 10 10) (20 20 20 20))
+               ((30 30 30 30) (40 40 40 40))))
+
+;;funcion rotate90
 
 (define rotate90
   (lambda (imagen)
@@ -214,7 +218,29 @@
       (else (envo-rotate90 (cdr imagen) imagen-copia imagen-aux temp cant-col cant-fil fil col aux (+ 1 contador))))))
 
 
+;;edit
 
+;(define edit
+  ;(lambda (funcion imagen)
+    ;(map funcion (descontructor imagen))))
+
+
+(define edit
+  (lambda (funcion imagen)
+    (map funcion (descontructor imagen))))
+
+(define invertColorBit;;funciona bien
+  (lambda (pixbit-d)
+    (cond
+      [(eq? (car pixbit-d) 1) (cons 0 (remove (car pixbit-d) pixbit-d))]
+      (else (cons  1 (remove (car pixbit-d) pixbit-d))))))
+
+(define invertColorRGB
+  (lambda (pixrgb-d)
+    (cons (- 255 (car pixrgb-d)) (cons (- 255 (second pixrgb-d)) (cons (- 255 (third pixrgb-d)) (cons (last pixrgb-d)'()))))))
+
+;(define constru-imagen
+  ;(lambda (pixeles imagen lista-aux fil col cant-f cant-c)
 
 
 
