@@ -227,7 +227,20 @@
 
 (define edit
   (lambda (funcion imagen)
-    (map funcion (descontructor imagen))))
+    (envo-edit imagen funcion (get-cant-fil imagen) (get-cant-col imagen))))
+
+(define envo-edit
+  (lambda (imagen funcion fil col)
+    (contru-imagenv2 (map funcion (descontructor imagen)) '() '() fil col 0 0)))
+
+(define contru-imagenv2
+  (lambda (imagen-descontru aux new-imagen cant-fil cant-col fil col)
+    (cond
+      ;[(null? imagen-descontru) (reverse new-imagen)]
+      [(eq? cant-col col) (reverse new-imagen)]
+      [(eq? cant-fil fil) (contru-imagenv2 imagen-descontru '() (cons (reverse aux) new-imagen) cant-fil cant-col 0 (+ 1 col))]
+      (else (contru-imagenv2 (cdr imagen-descontru) (cons (car imagen-descontru) aux) new-imagen cant-fil cant-col (+ 1 fil) col)))))
+
 
 (define invertColorBit;;funciona bien
   (lambda (pixbit-d)
@@ -239,8 +252,46 @@
   (lambda (pixrgb-d)
     (cons (- 255 (car pixrgb-d)) (cons (- 255 (second pixrgb-d)) (cons (- 255 (third pixrgb-d)) (cons (last pixrgb-d)'()))))))
 
+;;(edit invertColorBit img1)
+
 ;(define constru-imagen
   ;(lambda (pixeles imagen lista-aux fil col cant-f cant-c)
+
+
+;;constru-imagen (car (cddr pixeles)) '() '() fil col 0 0
+
+
+;;---image->string---;;
+
+(define imagen->string
+  (lambda (imagen funcion)
+    (envo-imagen->string funcion imagen (get-cant-fil imagen) (get-cant-col imagen))))
+
+(define envo-imagen->string
+  (lambda (funcion imagen fil col)
+    (funcion (descontructor(reverse(flipH imagen))) "" "" fil col 0 0)))
+
+
+(define string->pixbit ;;caso en que es un bit-map
+  (lambda (imagen string-imagen string-aux fil col cant-fil cant-col)
+    (cond
+      [(eq? cant-col col) string-imagen]
+      [(eq? cant-fil fil) (string->pixbit imagen (string-append string-aux (string-append "\n" string-imagen)) "" fil col 0 (+ 1 cant-col))]
+      (else (string->pixbit (cdr imagen) string-imagen (string-append (get-string->pixbit (car imagen)) string-aux) fil col (+ 1 cant-fil) cant-col)))))
+
+(define get-string->pixbit ;;pasarla al TDA pixbit, es de ahi
+  (lambda (pixbit-d)
+    (string-append(number->string (first pixbit-d)) "\t")))
+
+
+
+
+;;(display(imagen->string img1 string->pixbit))
+;(imagen->string img1 string->pixbit)
+
+
+
+
 
 
 
