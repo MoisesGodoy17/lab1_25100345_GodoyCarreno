@@ -9,6 +9,8 @@
 (provide resta-resto)
 (provide conversion->hex)
 (provide hex->string)
+(provide cant-elementos-pixrgb)
+(provide es-pixrgb?)
 
 (define pixrgb-d ;;contructor del bit de la imagen 
   (lambda (x y r g b depth)
@@ -29,6 +31,36 @@
 (define get-D
   (lambda (imagen)
     (last imagen)))
+
+;Descripcion: funcion que suma la cantidad de elementos que hay en un pixel
+;Dominio; Lista
+;Recorrido; Num
+;Tipo de recursion: Natural
+
+(define cant-elementos-pixrgb
+  (lambda (pixel)
+    (cond
+      [(null? pixel) 0]
+      (else (+ 1 (cant-elementos-pixrgb (cdr pixel)))))))
+
+
+;Descripcion: funcion que determina si el pixel de entrada es un pixrgb
+;Dominio; Lista
+;Recorrido; Num
+;Tipo de recursion: Natural
+
+(define es-pixrgb?
+  (lambda (pixel acum cant-elemen)
+    (cond
+      [(eq? 3 acum) #t]
+      [(eq? cant-elemen 4)
+       (cond
+         [(<= 0 (car pixel))
+          (cond
+            [(<= (car pixel) 255) (es-pixrgb? (cdr pixel) (+ 1 acum) cant-elemen)]
+            (else #f))]
+         (else #f))]
+      (else #f))))
 
 (define resto-num;;como idea se puede aplicar un map a todos los elementos
   (lambda (numero lista)
@@ -53,3 +85,6 @@
 (define hex->string
   (lambda (hex temp)
       (cons (string-append (first hex) (second hex)) temp)))
+
+
+
