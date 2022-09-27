@@ -1,10 +1,10 @@
 #lang racket
 
-(require "TDA-pixbit-d.rkt")
-(require "TDA-pixrgb-d.rkt")
-(require "TDA-pixhex-d.rkt")
-(require "imagen-constructor.rkt")
 
+(require "TDA-pixbit-d_25100345_MoisesGodoy")
+(require "TDA-pixrgb-d_25100345_MoisesGodoy")
+(require "TDA-pixhex-d_25100345_MoisesGodoy")
+(require "TDA-image_25100345_MoisesGodoy")
 
 
 
