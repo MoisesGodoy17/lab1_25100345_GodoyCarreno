@@ -1,0 +1,7 @@
+Para ejecutar las funciones solo basta con tener los siguientes archivos:
+
+(require "TDA-pixbit-d_25100345_MoisesGodoy")
+(require "TDA-pixrgb-d_25100345_MoisesGodoy")
+(require "TDA-pixhex-d_25100345_MoisesGodoy")
+(require "TDA-image_25100345_MoisesGodoy")
+
