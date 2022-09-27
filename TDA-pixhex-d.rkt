@@ -5,17 +5,17 @@
 (provide es-pixhex?)
 
 ;Descripcion: funcion que contruye un pixhex-d
-;Dominio; Num X Num X String X Num
-;Recorrido; pixhex-d
+;Dominio: Num X Num X String X Num
+;Recorrido: pixhex-d
 
 (define pixhex-d ;;contructor del bit de la imagen 
   (lambda (x y hex depth)
     (list x y hex depth)))
 
 ;Descripcion: funcion que suma la cantidad de elementos que hay en un pixel
-;Dominio; Lista
-;Recorrido; Num
-;Tipo de recursion: Natural
+;Dominio: Lista
+;Recorrido: Num
+;Tipo de recursion: Natural.
 
 (define cant-elementos-pixhex
   (lambda (pixel)
@@ -27,6 +27,10 @@
 ;;(string-ref "Apple" 0)
 ;(eq? (string-ref (car '("#12" "#2")) 1) #\1)
 
+;Descripcion: funcion que verifica string a string si sus valores corresponden a un hexpix-d.
+;Dominio: Pixhex-d X List
+;Recorrido: Boolean.
+;Tipo de recursion: Recursion de cola.
 
 (define es-pixhex?
   (lambda (pixel posicion)
